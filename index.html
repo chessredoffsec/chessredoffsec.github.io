@@ -1,441 +1,157 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Madurez AppSec LATAM — Evaluación (0–10)</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Madurez AppSec LATAM</title>
 
-  <!-- Seguridad (sin recursos externos). Nota: no usamos storage ni red.
-       CSP restringe todo a self y permite estilos inline para este archivo único. -->
-  <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; upgrade-insecure-requests">
-  <meta name="referrer" content="no-referrer" />
-  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'">
 
-  <style>
-    :root { color-scheme: light dark; }
-    body { font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; margin:0; padding:24px; line-height:1.45; }
-    .wrap { max-width: 980px; margin: 0 auto; }
-    h1 { margin: 0 0 6px; font-size: 1.25rem; }
-    .sub { margin: 0 0 14px; opacity: .85; }
-    .card { border: 1px solid rgba(127,127,127,.35); border-radius: 14px; padding: 16px; margin: 14px 0; }
-    .row { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
-    label { font-weight: 700; }
-    select, button { font: inherit; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(127,127,127,.45); background: transparent; }
-    button { cursor:pointer; }
-    button:disabled { opacity:.6; cursor:not-allowed; }
-    .muted { opacity: .85; font-size: .92rem; margin: 8px 0 0; }
-    .q { margin: 14px 0; padding-top: 12px; border-top: 1px dashed rgba(127,127,127,.35); }
-    .q:first-child { border-top: 0; padding-top: 0; }
-    .qt { margin: 0 0 8px; font-weight: 800; }
-    .opts { display: grid; gap: 8px; }
-    .opt { display:flex; gap:10px; align-items:flex-start; padding: 10px; border-radius: 12px; border: 1px solid rgba(127,127,127,.25); }
-    .opt input { margin-top: 2px; }
-    .lvl { font-weight: 800; }
-    .desc { opacity: .9; font-size: .92rem; margin-top: 2px; }
-    .grid2 { display:grid; grid-template-columns: 1fr; gap: 12px; }
-    @media (min-width: 860px) { .grid2 { grid-template-columns: 1fr 1fr; } }
-    .badge { display:inline-block; padding: 6px 10px; border-radius: 999px; border: 1px solid rgba(127,127,127,.35); font-weight: 800; }
-    .score { font-size: 1.15rem; font-weight: 900; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 10px 8px; border-bottom: 1px solid rgba(127,127,127,.25); text-align:left; }
-    th { font-weight: 900; }
-    .tiny { font-size: .88rem; opacity: .8; margin-top: 10px; }
-    .hr { height:1px; background: rgba(127,127,127,.25); margin: 10px 0; }
-    details { border: 1px solid rgba(127,127,127,.25); border-radius: 12px; padding: 10px 12px; }
-    summary { cursor:pointer; font-weight: 800; }
-    .pill { display:inline-block; padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(127,127,127,.35); font-weight: 700; font-size: .85rem; }
-  </style>
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0;padding:20px;line-height:1.4}
+.wrap{max-width:900px;margin:auto}
+.card{border:1px solid #ccc;border-radius:14px;padding:16px;margin-bottom:16px}
+h1{margin:0 0 6px;font-size:1.3rem}
+.sub{opacity:.85;margin-bottom:14px}
+label{font-weight:700}
+select,button{font:inherit;padding:10px 12px;border-radius:10px;border:1px solid #aaa}
+button{cursor:pointer}
+button:disabled{opacity:.5}
+.q{margin-top:14px;padding-top:12px;border-top:1px dashed #ccc}
+.opt{display:flex;gap:10px;padding:8px;border:1px solid #ddd;border-radius:10px;margin-top:6px}
+.score{font-size:1.1rem;font-weight:800}
+.badge{display:inline-block;padding:6px 10px;border:1px solid #aaa;border-radius:999px;font-weight:700}
+.muted{opacity:.8;font-size:.9rem}
+table{width:100%;border-collapse:collapse}
+td,th{padding:6px;border-bottom:1px solid #ddd}
+</style>
 </head>
 
 <body>
 <div class="wrap">
-  <h1>Madurez AppSec LATAM — Evaluación de Desarrollo Seguro</h1>
-  <p class="sub">
-    10 preguntas · 3 niveles por pregunta · nota final <strong>0–10</strong> · base conceptual <span class="pill">OWASP SAMM</span> + <span class="pill">DSOM</span>.
-  </p>
 
-  <div class="card">
-    <div class="row">
-      <label for="country">Selecciona tu país (solo para conteo en pantalla):</label>
-      <select id="country" aria-label="País">
-        <option value="">— seleccionar —</option>
-        <option>Ecuador</option>
-        <option>Uruguay</option>
-        <option>México</option>
-        <option>Costa Rica</option>
-        <option>Panamá</option>
-        <option>Argentina</option>
-        <option>Bolivia</option>
-        <option>Chile</option>
-        <option>Colombia</option>
-        <option>Paraguay</option>
-        <option>Perú</option>
-        <option>Venezuela</option>
-      </select>
-      <button id="startBtn" type="button">Comenzar</button>
-    </div>
+<h1>Madurez AppSec LATAM</h1>
+<p class="sub">Evaluación de madurez en desarrollo seguro · 10 preguntas · Nota 0–10</p>
 
-    <p class="muted" id="privacyNote">
-      Privacidad: no se recolectan datos personales ni de empresa. No se usa cookies, localStorage, sessionStorage ni red.
-      El conteo por país funciona solo mientras esta página esté abierta (se borra al recargar o cerrar).
-    </p>
+<div class="card">
+<label>Selecciona tu país (solo para conteo en pantalla):</label><br><br>
+<select id="country">
+<option value="">— seleccionar —</option>
+<option>Ecuador</option>
+<option>Uruguay</option>
+<option>México</option>
+<option>Costa Rica</option>
+<option>Panamá</option>
+<option>Argentina</option>
+<option>Bolivia</option>
+<option>Chile</option>
+<option>Colombia</option>
+<option>Paraguay</option>
+<option>Perú</option>
+<option>Venezuela</option>
+</select>
+<button onclick="start()">Comenzar</button>
 
-    <details style="margin-top:10px;">
-      <summary>Ver detalles de privacidad</summary>
-      <div class="tiny">
-        Este archivo HTML:
-        <ul>
-          <li>No envía datos a servidores (sin <code>fetch</code>, sin analytics, sin formularios remotos).</li>
-          <li>No guarda nada en el navegador (sin cookies, sin localStorage, sin sessionStorage).</li>
-          <li>El conteo por país se mantiene únicamente en memoria (RAM) durante esta sesión.</li>
-        </ul>
-      </div>
-    </details>
-  </div>
+<p class="muted">
+Privacidad: no se recolectan datos personales ni de empresa.  
+No cookies, no storage, no envío de datos.
+</p>
+</div>
 
-  <form id="quiz" class="card" hidden autocomplete="off" novalidate>
-    <div id="questions"></div>
+<form id="quiz" class="card" style="display:none">
+<div id="questions"></div>
+<br>
+<button type="submit" id="submit" disabled>Ver resultado</button>
+</form>
 
-    <div class="row" style="margin-top:14px;">
-      <button id="submitBtn" type="submit" disabled>Ver resultado</button>
-      <button id="resetBtn" type="button">Limpiar respuestas</button>
-    </div>
+<div id="result" class="card" style="display:none">
+<div class="score" id="score"></div>
+<div id="level"></div>
+<p class="muted" id="hint"></p>
 
-    <p class="muted">
-      Cada pregunta: <strong>Inicial (0)</strong>, <strong>Intermedio (0,5)</strong>, <strong>Avanzado (1)</strong>.
-    </p>
-  </form>
+<h3>Respondentes por país (sesión actual)</h3>
+<table><tbody id="counts"></tbody></table>
+</div>
 
-  <div id="outputs" class="card grid2" hidden>
-    <div>
-      <div class="score" id="scoreLine">Nota: —</div>
-      <div style="margin-top:8px;" id="levelLine"><span class="badge">Nivel: —</span></div>
-      <p class="muted" id="explainLine">Responde las 10 preguntas para ver tu madurez.</p>
-      <div class="hr"></div>
-      <p class="tiny">
-        Clasificación sugerida: <strong>0–3,5</strong> Básico · <strong>4–7</strong> En evolución · <strong>7,5–10</strong> Maduro
-      </p>
-    </div>
-
-    <div>
-      <div class="row" style="justify-content: space-between;">
-        <div style="font-weight:900;">Respondentes por país (solo esta sesión)</div>
-        <button id="clearCountsBtn" type="button">Reiniciar conteo</button>
-      </div>
-
-      <div style="overflow:auto; margin-top:10px;">
-        <table aria-label="Conteo por país">
-          <thead>
-            <tr><th>País</th><th>Personas</th></tr>
-          </thead>
-          <tbody id="countryCounts"></tbody>
-        </table>
-      </div>
-
-      <p class="tiny">
-        Nota: para tener conteo “global” real entre personas diferentes, se necesita un servidor.
-        Aquí mantenemos <strong>cero recolección</strong>.
-      </p>
-    </div>
-  </div>
 </div>
 
 <script>
-(() => {
-  "use strict";
+const questions=[
+"¿Existe un plan estratégico formal de AppSec?",
+"¿Se realizan pentests de forma regular?",
+"¿Existen prácticas de seguridad para adopción de IA?",
+"¿Hay entrenamientos de seguridad para desarrolladores?",
+"¿Se aplican prácticas de seguridad en la IDE?",
+"¿Las aplicaciones cloud siguen prácticas de seguridad?",
+"¿Existen controles de seguridad en CI/CD?",
+"¿Se miden métricas y KPIs de seguridad?",
+"¿Las prácticas están alineadas con compliance?",
+"¿Existen requisitos de seguridad y modelado de amenazas?"
+];
 
-  // Países EXACTOS (LATAM) según tu lista:
-  const COUNTRIES = [
-    "Ecuador","Uruguay","México","Costa Rica","Panamá","Argentina",
-    "Bolivia","Chile","Colombia","Paraguay","Perú","Venezuela"
-  ];
+const answers=[
+["Inicial (0)",0],["Intermedio (0,5)",0.5],["Avanzado (1)",1]
+];
 
-  // 10 preguntas alineadas con OWASP SAMM + DSOM (alto nivel, sin pedir info de empresa)
-  // Valores: 0 / 0.5 / 1 => total 0..10
-  const QUESTIONS = [
-    {
-      title: "1) ¿Existe un plan estratégico formal de AppSec?",
-      map: "SAMM: Governance (Strategy & Metrics)",
-      answers: [
-        ["Inicial", "No existe un plan formal de seguridad de aplicaciones.", 0],
-        ["Intermedio", "Existe un plan básico, pero sin métricas claras ni revisiones periódicas.", 0.5],
-        ["Avanzado", "Existe un plan estratégico basado en riesgos, revisado periódicamente y con métricas.", 1],
-      ]
-    },
-    {
-      title: "2) ¿Se realizan pentests de forma regular?",
-      map: "SAMM: Verification | DSOM: Security Testing",
-      answers: [
-        ["Inicial", "Los pentests son esporádicos o solo después de incidentes.", 0],
-        ["Intermedio", "Hay ciclos definidos, pero con priorización limitada por riesgo.", 0.5],
-        ["Avanzado", "Pentests regulares, priorizados por riesgo, con revalidación y seguimiento.", 1],
-      ]
-    },
-    {
-      title: "3) ¿Existen prácticas de seguridad para adopción de IA / LLMs?",
-      map: "SAMM: Design | DSOM: Secure Design",
-      answers: [
-        ["Inicial", "Se usa IA sin políticas ni controles de seguridad.", 0],
-        ["Intermedio", "Hay lineamientos básicos y revisiones puntuales de riesgo.", 0.5],
-        ["Avanzado", "Políticas claras, threat modeling para IA y controles sobre datos, prompts y exposición.", 1],
-      ]
-    },
-    {
-      title: "4) ¿Hay entrenamientos y acciones culturales de seguridad para desarrolladores?",
-      map: "SAMM: Education & Guidance",
-      answers: [
-        ["Inicial", "No existen entrenamientos formales de seguridad.", 0],
-        ["Intermedio", "Entrenamientos ocasionales o para algunos equipos.", 0.5],
-        ["Avanzado", "Programa continuo, práctico y adaptado a riesgos reales del día a día.", 1],
-      ]
-    },
-    {
-      title: "5) ¿Existen prácticas de seguridad integradas en la IDE?",
-      map: "DSOM: Shift Left (Developer Feedback)",
-      answers: [
-        ["Inicial", "No se usan herramientas de seguridad en la IDE.", 0],
-        ["Intermedio", "Uso parcial de plugins o análisis locales.", 0.5],
-        ["Avanzado", "Seguridad integrada (SAST/secrets) con feedback temprano y accionable al dev.", 1],
-      ]
-    },
-    {
-      title: "6) ¿Las aplicaciones cloud siguen prácticas de seguridad definidas?",
-      map: "SAMM: Implementation | DSOM: Cloud Security",
-      answers: [
-        ["Inicial", "Configuraciones cloud sin estándares ni revisiones de seguridad.", 0],
-        ["Intermedio", "Buenas prácticas aplicadas en servicios críticos, no de forma consistente.", 0.5],
-        ["Avanzado", "Estándares cloud seguros, automatización y revisiones continuas por riesgo.", 1],
-      ]
-    },
-    {
-      title: "7) ¿Existen controles de seguridad en las pipelines CI/CD?",
-      map: "DSOM: Secure CI/CD",
-      answers: [
-        ["Inicial", "Pipelines sin validaciones de seguridad.", 0],
-        ["Intermedio", "Hay controles, pero sin criterios claros de bloqueo o excepciones.", 0.5],
-        ["Avanzado", "Gates basados en riesgo, evidencias y excepciones controladas (con revisión).", 1],
-      ]
-    },
-    {
-      title: "8) ¿Se recogen métricas y KPIs para mejorar el flujo de desarrollo?",
-      map: "SAMM: Strategy & Metrics",
-      answers: [
-        ["Inicial", "No se miden métricas relacionadas con seguridad.", 0],
-        ["Intermedio", "Se miden algunas métricas, pero se usan poco en decisiones.", 0.5],
-        ["Avanzado", "KPIs claros (riesgo, MTTR, cobertura) usados para mejora continua.", 1],
-      ]
-    },
-    {
-      title: "9) ¿Las prácticas están alineadas con políticas y normas de compliance?",
-      map: "SAMM: Governance | DSOM: Compliance by Design",
-      answers: [
-        ["Inicial", "Compliance se aborda de forma reactiva (solo auditoría/urgencia).", 0],
-        ["Intermedio", "Alineación parcial; controles varían entre equipos/proyectos.", 0.5],
-        ["Avanzado", "Controles técnicos integrados a políticas, requisitos regulatorios y evidencias.", 1],
-      ]
-    },
-    {
-      title: "10) ¿Existen requisitos de seguridad y modelado de amenazas?",
-      map: "SAMM: Design (Threat Assessment)",
-      answers: [
-        ["Inicial", "Seguridad se considera tarde (después de problemas).", 0],
-        ["Intermedio", "Requisitos y threat modeling para sistemas críticos o proyectos clave.", 0.5],
-        ["Avanzado", "Requisitos claros desde el inicio y threat modeling recurrente por cambios/riesgo.", 1],
-      ]
-    },
-  ];
+let state={country:"",scores:[],counts:{}};
 
-  // Estado en memoria (RAM) - NO persistente:
-  const state = {
-    country: "",
-    counts: Object.fromEntries(COUNTRIES.map(c => [c, 0])),
-    answered: new Array(QUESTIONS.length).fill(null)
-  };
+function start(){
+const c=document.getElementById("country").value;
+if(!c)return alert("Selecciona un país");
+state.country=c;
+document.getElementById("quiz").style.display="block";
+renderQuestions();
+}
 
-  const $ = (id) => document.getElementById(id);
+function renderQuestions(){
+const box=document.getElementById("questions");
+box.innerHTML="";
+questions.forEach((q,i)=>{
+const div=document.createElement("div");
+div.className="q";
+div.innerHTML=`<strong>${q}</strong>`;
+answers.forEach(a=>{
+div.innerHTML+=`
+<label class="opt">
+<input type="radio" name="q${i}" value="${a[1]}" onchange="answer(${i},${a[1]})">
+${a[0]}
+</label>`;
+});
+box.appendChild(div);
+});
+}
 
-  const countrySel = $("country");
-  const startBtn = $("startBtn");
-  const quiz = $("quiz");
-  const questionsBox = $("questions");
-  const submitBtn = $("submitBtn");
-  const resetBtn = $("resetBtn");
+function answer(i,v){
+state.scores[i]=v;
+document.getElementById("submit").disabled=state.scores.length!==10;
+}
 
-  const outputs = $("outputs");
-  const scoreLine = $("scoreLine");
-  const levelLine = $("levelLine");
-  const explainLine = $("explainLine");
-  const countryCountsTbody = $("countryCounts");
-  const clearCountsBtn = $("clearCountsBtn");
+document.getElementById("quiz").onsubmit=e=>{
+e.preventDefault();
+const total=state.scores.reduce((a,b)=>a+b,0).toFixed(1);
+let lvl="Básico",hint="Enfócate en fundamentos de seguridad.";
+if(total>=4) {lvl="En evolución";hint="Buen progreso, estandariza prácticas."}
+if(total>=7.5){lvl="Maduro";hint="Mantén consistencia y mejora continua."}
 
-  function escapeText(s) {
-    return String(s).replace(/[&<>"']/g, (m) => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-    }[m]));
-  }
+state.counts[state.country]=(state.counts[state.country]||0)+1;
 
-  function renderQuestions() {
-    questionsBox.innerHTML = "";
-    QUESTIONS.forEach((q, i) => {
-      const qWrap = document.createElement("div");
-      qWrap.className = "q";
+document.getElementById("score").innerText=`Nota: ${total} / 10`;
+document.getElementById("level").innerHTML=`<span class="badge">Nivel: ${lvl}</span>`;
+document.getElementById("hint").innerText=hint;
 
-      const title = document.createElement("div");
-      title.className = "qt";
-      title.textContent = q.title;
+renderCounts();
+document.getElementById("result").style.display="block";
+};
 
-      const map = document.createElement("div");
-      map.className = "muted";
-      map.textContent = q.map;
-
-      const opts = document.createElement("div");
-      opts.className = "opts";
-
-      q.answers.forEach((opt, k) => {
-        const [lvl, desc, val] = opt;
-        const id = `q${i}_o${k}`;
-
-        const lbl = document.createElement("label");
-        lbl.className = "opt";
-        lbl.setAttribute("for", id);
-
-        const input = document.createElement("input");
-        input.type = "radio";
-        input.name = `q${i}`;
-        input.id = id;
-        input.value = String(val);
-        input.addEventListener("change", () => {
-          state.answered[i] = val;
-          submitBtn.disabled = state.answered.some(v => v === null);
-        });
-
-        const txt = document.createElement("div");
-        const lvlEl = document.createElement("div");
-        lvlEl.className = "lvl";
-        lvlEl.textContent = `${lvl} (${val})`;
-
-        const descEl = document.createElement("div");
-        descEl.className = "desc";
-        descEl.textContent = desc;
-
-        txt.appendChild(lvlEl);
-        txt.appendChild(descEl);
-
-        lbl.appendChild(input);
-        lbl.appendChild(txt);
-
-        opts.appendChild(lbl);
-      });
-
-      qWrap.appendChild(title);
-      qWrap.appendChild(map);
-      qWrap.appendChild(opts);
-
-      questionsBox.appendChild(qWrap);
-    });
-  }
-
-  function calcScore() {
-    // 10 preguntas, cada una 0/0.5/1 => suma 0..10
-    const sum = state.answered.reduce((acc, v) => acc + (typeof v === "number" ? v : 0), 0);
-    return Math.round(sum * 10) / 10;
-  }
-
-  function classify(score) {
-    if (score <= 3.5) {
-      return {
-        lvl: "Básico",
-        hint: "Enfoque recomendado: fundamentos (acceso, validación, secretos) + controles mínimos en CI/CD."
-      };
-    }
-    if (score <= 7.0) {
-      return {
-        lvl: "En evolución",
-        hint: "Enfoque recomendado: estandarizar pipelines, métricas (MTTR/cobertura) y prácticas cloud consistentes."
-      };
-    }
-    return {
-      lvl: "Maduro",
-      hint: "Enfoque recomendado: mantener consistencia, medir mejora continua y reforzar threat modeling en cambios."
-      };
-  }
-
-  function renderCounts() {
-    countryCountsTbody.innerHTML = "";
-    COUNTRIES.forEach(c => {
-      const tr = document.createElement("tr");
-      const tdC = document.createElement("td");
-      const tdN = document.createElement("td");
-      tdC.textContent = c;
-      tdN.textContent = String(state.counts[c] || 0);
-      tr.appendChild(tdC);
-      tr.appendChild(tdN);
-      countryCountsTbody.appendChild(tr);
-    });
-  }
-
-  function resetAnswers() {
-    state.answered.fill(null);
-    quiz.reset();
-    submitBtn.disabled = true;
-    scoreLine.textContent = "Nota: —";
-    levelLine.innerHTML = '<span class="badge">Nivel: —</span>';
-    explainLine.textContent = "Responde las 10 preguntas para ver tu madurez.";
-  }
-
-  startBtn.addEventListener("click", () => {
-    const c = countrySel.value.trim();
-    if (!c) {
-      alert("Selecciona un país para comenzar.");
-      return;
-    }
-    if (!COUNTRIES.includes(c)) {
-      alert("País inválido. Selecciona uno de la lista.");
-      return;
-    }
-    state.country = c;
-    quiz.hidden = false;
-    outputs.hidden = false;
-    renderCounts();
-    // Nota: NO guardamos país en ningún storage; solo RAM.
-  });
-
-  quiz.addEventListener("submit", (e) => {
-    e.preventDefault();
-    if (!state.country) {
-      alert("Selecciona un país antes de responder.");
-      return;
-    }
-    if (state.answered.some(v => v === null)) {
-      alert("Responde las 10 preguntas para ver el resultado.");
-      return;
-    }
-
-    const score = calcScore();
-    const cls = classify(score);
-
-    // Conteo por país SOLO en memoria:
-    state.counts[state.country] = (state.counts[state.country] || 0) + 1;
-
-    scoreLine.textContent = `Nota: ${score} / 10`;
-    levelLine.innerHTML = `<span class="badge">Nivel: ${escapeText(cls.lvl)}</span>`;
-    explainLine.textContent = cls.hint;
-
-    renderCounts();
-  });
-
-  resetBtn.addEventListener("click", resetAnswers);
-
-  clearCountsBtn.addEventListener("click", () => {
-    state.counts = Object.fromEntries(COUNTRIES.map(c => [c, 0]));
-    renderCounts();
-  });
-
-  // Inicialización
-  renderQuestions();
-  renderCounts();
-})();
+function renderCounts(){
+const tb=document.getElementById("counts");
+tb.innerHTML="";
+Object.entries(state.counts).forEach(([c,n])=>{
+tb.innerHTML+=`<tr><td>${c}</td><td>${n}</td></tr>`;
+});
+}
 </script>
+
 </body>
 </html>
