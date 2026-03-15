@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Azion WAF Testing</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      line-height: 1.5;
+    }
+    h1, h2 {
+      margin-top: 24px;
+    }
+    form {
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin: 10px 0 6px;
+      font-weight: bold;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 12px;
+      cursor: pointer;
+    }
+    .note {
+      background: #f5f5f5;
+      border-left: 4px solid #999;
+      padding: 12px;
+      margin-bottom: 20px;
+    }
+    code {
+      background: #f2f2f2;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Azion WAF Testing</h1>
+
+  <div class="note">
+    Página de testes controlados para validar inspeção do WAF em
+    <code>query string</code> e <code>body</code>.
+  </div>
+
+  <h2>Teste via GET</h2>
+  <form method="GET" action="/aziontesting/">
+    <label for="q">Parâmetro q</label>
+    <input
+      id="q"
+      name="q"
+      type="text"
+      placeholder="Ex.: teste simples"
+    />
+
+    <label for="id">Parâmetro id</label>
+    <input
+      id="id"
+      name="id"
+      type="text"
+      placeholder="Ex.: 123"
+    />
+
+    <button type="submit">Enviar GET</button>
+  </form>
+
+  <h2>Teste via POST</h2>
+  <form method="POST" action="/aziontesting/">
+    <label for="username">Campo username</label>
+    <input
+      id="username"
+      name="username"
+      type="text"
+      placeholder="Digite um valor"
+    />
+
+    <label for="search">Campo search</label>
+    <input
+      id="search"
+      name="search"
+      type="text"
+      placeholder="Digite um valor"
+    />
+
+    <label for="comments">Campo comments</label>
+    <textarea
+      id="comments"
+      name="comments"
+      rows="6"
+      placeholder="Digite um valor"
+    ></textarea>
+
+    <button type="submit">Enviar POST</button>
+  </form>
+
+  <h2>Teste rápido via links</h2>
+  <p>
+    <a href="/aziontesting/?q=teste">GET simples</a>
+  </p>
+  <p>
+    <a href="/aziontesting/?id=123">GET com id</a>
+  </p>
+</body>
+</html>
